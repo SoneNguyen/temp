@@ -13,6 +13,11 @@ javac -cp "../lib/TraaS.jar;." TestTraaS.java; java -cp "../lib/TraaS.jar;." Tes
 - For logging (not implemented)
 ### Requirement
 - Create JavaDoc for every class created
+    - The wrapper now includes in-code explanations of the lifecycle flow (see
+      {@code TraasSimulation}, {@code VehicleManager}, {@code VehicleGroup}, and
+      {@code VehicleProxy}) so that the intended usage pattern is easy to follow.
+      In short: start the simulation via the facade, refresh vehicles on each
+      step, then query/control vehicles through the manager and group helpers.
 ## Cores Features
 ### Features for wrapper (Need to specify library's branch)
 #### Basic Description
@@ -23,7 +28,12 @@ and extensible object-oriented wrapper around it. This wrapper should:
 - Enable grouping, filtering, and event handling
 
 Source for building wrapper:
-https://sumo.dlr.de/javadoc/traas/ 
+https://sumo.dlr.de/javadoc/traas/
+### Wrapper Overview
+- **TraasSimulation**: boots the TraCI server, enforces lifecycle order, and exposes the vehicle manager after setting the step-length/start options.
+- **VehicleManager**: refreshes the TraCI vehicle list each step, constructs proxies, and notifies listeners about adds/updates/removals so application code can react to changes.
+- **VehicleProxy**: wraps a single vehicle with cached snapshots and common control helpers (set speed, slow down, change lane, stop) to avoid direct static TraaS usage.
+- **VehicleGroup**: returned by the manager to support "group then act" workflows; filter vehicles with predicates and invoke bulk operations like setting speed across the selection.
 1. Use the TraaS API to connect to a running SUMO simulation.
 From it.polito.appeal.traci.SumoTraciConnection:
 ``` 
