@@ -1,0 +1,7 @@
+git clone -b <branch name> https://github.com/HoNguyen17/traffic_light
+
+git add .
+git commit -m "<message>"
+git push origin <branch name>
+
+Don't just commit to main.
